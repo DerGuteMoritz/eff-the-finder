@@ -24,7 +24,7 @@ class F::Finder
   end
 
   def prompt(results)
-    F::Prompt.new(results).show
+    F::Prompt.new(results)
   end
 
   def doc(path, query)

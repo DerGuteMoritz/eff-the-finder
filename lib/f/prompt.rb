@@ -1,4 +1,5 @@
 require 'highline/import'
+require 'launchy'
 
 HighLine.track_eof = false
 
@@ -6,11 +7,12 @@ class F::Prompt
 
   @@commands = {
     'f' => [ 'follow link',
-             lambda { |r| puts "opening #{r.url} in browser!" } ]
+             lambda { |r| Launchy.open(r.url) } ]
   }
 
   def initialize(results)
     @results = results
+    show
   end
 
   def show
