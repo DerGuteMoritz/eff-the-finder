@@ -6,7 +6,7 @@ class F::Finder
   include HTTParty
 
   def initialize(args)
-    @terms = args
+    @args, @term = args, args.join(' ')
   end
 
   protected
