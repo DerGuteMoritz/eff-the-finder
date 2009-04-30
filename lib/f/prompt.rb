@@ -29,18 +29,17 @@ class F::Prompt
   protected
 
   def run_command(s)
-    command, args = parse_command_string(s)
+    command, args = parse_command_string(s.strip)
     return help unless command
-    command = command[1]
     return not_enough_arguments(command, args) if args.size < command.arity
     command.call(*args) || true
   end
 
   def parse_command_string(s)
-    t = s.strip.split(/\s/)
-    args = Array(t[1..-1])
+    c = @@commands[s[/\A([a-z]+)/, 1]]
+    args = Array(s[/\A[a-z]+(.*)/, 1].to_s.split(/\s/))
     args[0] = @results[args[0].to_i-1] if args[0].to_s =~ /\A\d+\z/
-    [@@commands[t[0]], args]
+    [c && c[1], args]
   end
 
   def with_padding(index)
