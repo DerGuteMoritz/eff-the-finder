@@ -7,8 +7,10 @@ class F::Finder::Google < F::Finder
   end
 
   def find
-    doc('/search', :q => @term).css('h3.r a.l').map do |a|
-       result a.text, a['href']
+    result_for '/search', :q => @term do |doc, result|
+      doc.css('h3.r a.l').map do |a|
+        result << [a.text, a['href']]
+      end
     end
   end
 

@@ -1,15 +1,31 @@
-class F::Result
+require 'delegate'
 
-  attr_reader :name, :url
+class F::Result < DelegateClass(Array)
 
-  def initialize(name, url)
-    @name, @url = name, url
+  class Item
+
+    attr_reader :name, :url
+
+    def initialize(name, url)
+      @name, @url = name, url
+    end
+
+    def to_s
+      name
+    end
+
+    alias inspect to_s
+
   end
 
-  def to_s
-    name
+  def initialize(finder)
+    @finder = finder
+    @items = []
+    super(@items)
   end
 
-  alias inspect to_s
+  def <<(item)
+    @items << Item.new(*item)
+  end
 
 end

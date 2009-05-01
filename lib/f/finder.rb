@@ -27,8 +27,9 @@ class F::Finder
     F::Prompt.new(results)
   end
 
-  def doc(path, query)
-    Nokogiri(self.class.get(path, :query => query))
+  def result_for(path, query)
+    yield(Nokogiri(self.class.get(path, :query => query)), result = F::Result.new(self))
+    return result
   end
 
 end
