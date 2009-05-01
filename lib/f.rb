@@ -20,7 +20,7 @@ class F
   def initialize(args)
     eval(args)
   rescue Interrupt
-    exit 1
+    exit
   end
 
   protected

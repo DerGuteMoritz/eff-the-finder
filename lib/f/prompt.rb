@@ -7,7 +7,10 @@ class F::Prompt
 
   @@commands = {
     'f' => [ 'follow link',
-             lambda { |r| Launchy.open(r.url) } ]
+             lambda { |r| Launchy.open(r.url) } ],
+
+    'q' => [ 'quit',
+             lambda { exit } ]
   }
 
   def initialize(results)
@@ -21,9 +24,7 @@ class F::Prompt
       puts r
     end
 
-    loop do
-      break if run_command(ask('> '))
-    end
+    loop { run_command(ask('> ')) }
   end
 
   protected
@@ -37,7 +38,7 @@ class F::Prompt
 
   def parse_command_string(s)
     c = @@commands[s[/\A([a-z]+)/, 1]]
-    args = Array(s[/\A[a-z]+(.*)/, 1].to_s.split(/\s/))
+    args = Array(s[/\A[a-z]*(.*)/, 1].to_s.split(/\s/))
     args[0] = @results[args[0].to_i-1] if args[0].to_s =~ /\A\d+\z/
     [c && c[1], args]
   end
@@ -48,7 +49,7 @@ class F::Prompt
 
   def help
     puts 'Available commands: '
-    puts @@commands.map { |a,c| "#{a} - #{c[0]}" }.join("\n")
+    puts @@commands.sort_by { |c| c[0] }.map { |a,c| "#{a} - #{c[0]}" }.join("\n")
   end
 
   def not_enough_arguments(c, a)
