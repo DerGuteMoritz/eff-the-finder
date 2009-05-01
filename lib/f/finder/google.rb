@@ -5,10 +5,8 @@ F::Finder.define :google do
 
   parse do |doc, result|
     result.header = 'Google Search' + doc.css('#ssb p').text
-
-    unless (next_url = doc.css('#nav td.b:last a')).empty?
-      result.next_url = next_url[0]['href']
-    end
+    result.previous_url = doc.css('#nav td.b:first a')
+    result.next_url = doc.css('#nav td.b:last a')
 
     doc.css('h3.r a.l').each do |a|
       result << [a.text, a['href']]

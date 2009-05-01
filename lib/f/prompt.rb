@@ -15,6 +15,9 @@ class F::Prompt
     'n' => [ 'next page',
              :next_page ],
 
+    'p' => [ 'previous page',
+             :previous_page ],
+
     'q' => [ 'quit',
              lambda { exit } ]
   }
@@ -36,9 +39,19 @@ class F::Prompt
     end
   end
 
-  def next_page
-    @results = @results.next_page
+  def page(p)
+    @results = @results.send("#{p}_page")
     show
+  rescue F::Result::PageError
+    puts "There is no #{p} page"
+  end
+
+  def next_page
+    page(:next)
+  end
+
+  def previous_page
+    page(:previous)
   end
 
   def run
