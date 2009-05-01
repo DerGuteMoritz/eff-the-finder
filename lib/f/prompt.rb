@@ -9,13 +9,19 @@ class F::Prompt
     'f' => [ 'follow link',
              lambda { |r| Launchy.open(r.url) } ],
 
+    's' => [ 'show results',
+             :show ],
+
     'q' => [ 'quit',
              lambda { exit } ]
   }
 
+  protected
+
   def initialize(results)
     @results = results
     show
+    run
   end
 
   def show
@@ -23,23 +29,30 @@ class F::Prompt
       print with_padding("#{i.succ}.")
       puts r
     end
+  end
 
+  def run
     loop { run_command(ask('> ')) }
   end
 
-  protected
-
   def run_command(s)
-    command, args = parse_command_string(s.strip)
+    command, args = parse_command_string(s)
     return help unless command
+    command = method(command) unless command.respond_to?(:call)
     return not_enough_arguments(command, args) if args.size < command.arity
     command.call(*args) || true
   end
 
   def parse_command_string(s)
-    c = @@commands[s[/\A([a-z]+)/, 1]]
-    args = Array(s[/\A[a-z]*(.*)/, 1].to_s.strip.split(/\s/))
-    args[0] = @results[args[0].to_i-1] if args[0].to_s =~ /\A\d+\z/
+    if s =~ /\A(\d+)\z/
+      c = @@commands['f']
+      args = [@results[$1.to_i-1]]
+    else
+      c = @@commands[s[/\A([a-z]+)/, 1]]
+      args = Array(s[/\A[a-z]+(.*)/, 1].to_s.strip.split(/\s/))
+      args[0] = @results[args[0].to_i-1] if args[0].to_s =~ /\A\d+\z/
+    end
+
     [c && c[1], args]
   end
 
