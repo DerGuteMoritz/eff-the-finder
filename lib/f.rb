@@ -7,17 +7,20 @@ class F
     'This is Eff.'
   end
 
-  def self.load(glob)
-    Dir[Pathname.new(__FILE__).dirname.join('f').join(glob)].each do |file|
+  def self.load(glob, base = Pathname.new(__FILE__).dirname.join('f'))
+    Dir[Pathname.new(base).join(File.join(*Array(glob)))].each do |file|
       require file
     end
   end
 
   load '*.rb'
   load 'finder/*.rb'
+  load [ENV['HOME'], '.f/*.rb']
 
   def initialize(args)
     eval(args)
+  rescue Interrupt
+    exit 1
   end
 
   protected
