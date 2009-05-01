@@ -30,4 +30,8 @@ class F::Result < DelegateClass(Array)
     @items << Item.new(*item)
   end
 
+  def next_page
+    @finder.find_by_url(next_url)
+  end
+
 end

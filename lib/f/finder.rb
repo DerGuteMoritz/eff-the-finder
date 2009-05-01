@@ -44,31 +44,46 @@ class F::Finder
     if args.empty?
       puts description
     else
-      prompt(find(args))
+      prompt(load(args))
     end
+  end
+
+  def find_by_url(url)
+    parse(http.get(url))
   end
 
   protected
 
   attr :description
 
+  def http
+    @http ||= RFuzz::HttpClient.new(base_uri.host, base_uri.port)
+  end
+
   def base_uri(u = nil)
     @base_uri = URI.parse(u) if u
     @base_uri
   end
 
-  def find(args)
-    @http ||= RFuzz::HttpClient.new(base_uri.host, base_uri.port)
-    @parse.call(Nokogiri(@list.call(@http, args).http_body), result = F::Result.new(self))
-    return result
+  def load(args)
+    parse(find(args))
   end
 
-  def list(&block)
-    @list = block
+  def find(args = nil, &block)
+    if block_given?
+      @find = block
+    else
+      @find.call(http, args)
+    end
   end
 
-  def parse(&block)
-    @parse = block
+  def parse(response = nil, &block)
+    if block_given?
+      @parse = block
+    else
+      @parse.call(Nokogiri(response.http_body), result = F::Result.new(self))
+      return result
+    end
   end
 
   def prompt(results)

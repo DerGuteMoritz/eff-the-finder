@@ -12,6 +12,9 @@ class F::Prompt
     's' => [ 'show results',
              :show ],
 
+    'n' => [ 'next page',
+             :next_page ],
+
     'q' => [ 'quit',
              lambda { exit } ]
   }
@@ -31,6 +34,11 @@ class F::Prompt
       print with_padding("#{i.succ}.")
       puts r
     end
+  end
+
+  def next_page
+    @results = @results.next_page
+    show
   end
 
   def run
