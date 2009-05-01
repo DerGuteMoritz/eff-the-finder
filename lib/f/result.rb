@@ -2,6 +2,8 @@ require 'delegate'
 
 class F::Result < DelegateClass(Array)
 
+  attr_accessor :header
+
   class Item
 
     attr_reader :name, :url

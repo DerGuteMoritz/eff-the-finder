@@ -25,6 +25,8 @@ class F::Prompt
   end
 
   def show
+    puts @results.header if @results.header
+
     @results.each_with_index do |r, i|
       print with_padding("#{i.succ}.")
       puts r
@@ -38,7 +40,7 @@ class F::Prompt
   def run_command(s)
     command, args = parse_command_string(s)
     return help unless command
-    command = method(command) unless command.respond_to?(:call)
+    command = method(command) unless command.respond_to? :call
     return not_enough_arguments(command, args) if args.size < command.arity
     command.call(*args) || true
   end
