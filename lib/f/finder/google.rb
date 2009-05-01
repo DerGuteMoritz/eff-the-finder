@@ -1,19 +1,14 @@
-class F::Finder::Google < F::Finder
-
+F::Finder.define :google do
+  description 'Google search'
   base_uri 'http://www.google.com/'
+  list { |http, args| http.get '/search', :query => { :q => args.join(' ') } }
 
-  def description
-    'Google search.'
-  end
+  parse do |doc, result|
+    result.header = 'Google Search' + doc.css('#ssb p').text
+    result.next_url = doc.css('#nav td.b:last a')[0]['href']
 
-  def find
-    result_for '/search', :q => @term do |doc, result|
-
-      result.header = 'Google Search' + doc.css('#ssb p').text
-
-      doc.css('h3.r a.l').each do |a|
-        result << [a.text, a['href']]
-      end
+    doc.css('h3.r a.l').each do |a|
+      result << [a.text, a['href']]
     end
   end
 

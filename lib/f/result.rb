@@ -2,7 +2,7 @@ require 'delegate'
 
 class F::Result < DelegateClass(Array)
 
-  attr_accessor :header
+  attr_accessor :header, :next_url
 
   class Item
 
