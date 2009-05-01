@@ -38,7 +38,7 @@ class F::Prompt
 
   def parse_command_string(s)
     c = @@commands[s[/\A([a-z]+)/, 1]]
-    args = Array(s[/\A[a-z]*(.*)/, 1].to_s.split(/\s/))
+    args = Array(s[/\A[a-z]*(.*)/, 1].to_s.strip.split(/\s/))
     args[0] = @results[args[0].to_i-1] if args[0].to_s =~ /\A\d+\z/
     [c && c[1], args]
   end
