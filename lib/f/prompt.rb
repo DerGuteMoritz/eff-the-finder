@@ -6,24 +6,24 @@ HighLine.track_eof = false
 class F::Prompt
 
   @@commands = {
-    'f' => [ 'follow link',
-             lambda { |r| Launchy.open(r.url.to_s) } ],
+    :f => [ 'follow link',
+            lambda { |r| Launchy.open(r.url.to_s) } ],
 
-    's' => [ 'show results',
-             :show ],
+    :s => [ 'show results',
+            :show ],
 
-    'n' => [ 'next page',
-             :next_page ],
+    :n => [ 'next page',
+            :next_page ],
 
-    'p' => [ 'previous page',
-             :previous_page ],
+    :p => [ 'previous page',
+            :previous_page ],
 
-    'q' => [ 'quit',
-             lambda { exit } ]
+    :q => [ 'quit',
+            lambda { exit } ]
   }
 
   def self.define(name, command)
-    @@commands[name.to_s] = command
+    @@commands[name.to_sym] = command
   end
 
   protected
@@ -72,10 +72,10 @@ class F::Prompt
 
   def parse_command_string(s)
     if s =~ /\A(\d+)\z/
-      c = @@commands['f']
+      c = @@commands[:f]
       args = [@results[$1.to_i-1]]
     else
-      c = @@commands[s[/\A([a-z]+)/, 1]]
+      c = @@commands[s[/\A([a-z]+)/, 1].try(:to_sym)]
       args = Array(s[/\A[a-z]+(.*)/, 1].to_s.strip.split(/\s/))
       args[0] = @results[args[0].to_i-1] if args[0].to_s =~ /\A\d+\z/
     end
@@ -89,7 +89,7 @@ class F::Prompt
 
   def help
     puts 'Available commands: '
-    puts @@commands.sort_by { |c| c[0] }.map { |a,c| "#{a} - #{c[0]}" }.join("\n")
+    puts @@commands.sort_by { |c| c[0].to_s }.map { |a,c| "#{a} - #{c[0]}" }.join("\n")
   end
 
   def not_enough_arguments(c, a)
