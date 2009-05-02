@@ -57,7 +57,7 @@ class F::Finder
   attr :description
 
   def http
-    @http ||= RFuzz::HttpClient.new(base_uri.host, base_uri.port)
+    @http ||= RFuzz::HttpClient.new(base_uri.host, base_uri.port, :head => { 'Accept' => '*/*' })
   end
 
   def base_uri(u = nil)
