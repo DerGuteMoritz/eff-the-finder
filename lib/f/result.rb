@@ -45,8 +45,22 @@ class F::Result < DelegateClass(Array)
     super(@items)
   end
 
+  def items=(items)
+    @items.replace(items.map { |a| make_item(a.text, a['href']) })
+  end
+
   def <<(item)
-    @items << Item.new(*item)
+    @items << make_item(*item)
+  end
+
+  def make_item(text, url)
+    Item.new(text, absolutize_url(url))
+  end
+
+  def absolutize_url(u)
+    url = URI.parse(u)
+    url = @finder.base_uri.merge(url) unless url.absolute?
+    url
   end
 
   def page(p)

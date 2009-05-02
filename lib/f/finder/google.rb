@@ -7,10 +7,7 @@ F::Finder.define :google do
     result.header = 'Google Search' + doc.css('#ssb p').text
     result.previous_url = doc.css('#nav td.b:first a')
     result.next_url = doc.css('#nav td.b:last a')
-
-    doc.css('h3.r a.l').each do |a|
-      result << [a.text, a['href']]
-    end
+    result.items = doc.css('h3.r a.l')
   end
 
 end
