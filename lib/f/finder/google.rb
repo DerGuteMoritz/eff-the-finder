@@ -1,7 +1,7 @@
 F::Finder.define :google do
   description 'Google search'
   base_uri 'http://www.google.com/'
-  find { |http, args| http.get '/search', :query => { :q => args.join(' ') } }
+  find { |http, o| http.get '/search', :query => { :q => o[:terms] } }
 
   parse do |doc, result|
     result.header = 'Google Search' + doc.css('#ssb p').text

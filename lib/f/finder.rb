@@ -73,7 +73,7 @@ class F::Finder
     if block_given?
       @find = block
     else
-      @find.call(http, args)
+      @find.call(http, { :args => args, :terms => args.join(' ') } )
     end
   end
 
