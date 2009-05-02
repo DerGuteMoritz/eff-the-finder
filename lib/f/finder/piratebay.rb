@@ -6,8 +6,7 @@ F::Finder.define :piratebay do
   find { |http, o| http.get "/search/#{o[:terms]}" }
   
   command :t, 'download torrent file and open it with BITTORRENT_CLIENT', 0 => :result_for_index do |result|
-    torrent = ENV['BITTORRENT_CLIENT']
-    raise 'environment variable BITTORRENT_CLIENT is not set or empty' if torrent.blank?
+    torrent = env('BITTORRENT_CLIENT')
 
     Tempfile.open 'f.piratebay' do |f|
       f.write(http.get(http.get(result.url).at('.download a')['href']).content)

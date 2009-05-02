@@ -139,4 +139,9 @@ class F::Prompt
     http.get(result_for_index(i).url)
   end
 
+  def env(name)
+    raise "environment variable #{name} is not set or empty" if ENV[name].blank?
+    ENV[name]
+  end
+
 end
