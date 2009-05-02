@@ -53,7 +53,9 @@ class F::Prompt
   end
 
   def list
+    puts @finder.description
     puts @results.header if @results.header
+    puts
 
     @results.each_with_index do |r, i|
       print with_padding("#{i.succ}.")
