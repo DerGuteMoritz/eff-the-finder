@@ -75,7 +75,7 @@ class F::Finder
 
   def absolutize_uri(u)
     uri = URI.parse(u.to_s.gsub('[', '%5B').gsub(']', '%5D'))
-    uri = @finder.base_uri.merge(uri) unless uri.absolute?
+    uri = base_uri.merge(uri) unless uri.absolute?
     uri
   end
 
