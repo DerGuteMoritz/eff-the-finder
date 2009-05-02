@@ -67,7 +67,7 @@ class F::Prompt
   end
 
   def run
-    loop { run_command(ask('> ')) }
+    loop { run_command(ask('> ') { |q| q.readline = true } ) }
   end
 
   def run_command(s)
