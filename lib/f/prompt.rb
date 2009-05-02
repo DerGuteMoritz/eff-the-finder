@@ -77,7 +77,7 @@ class F::Prompt
   end
 
   def run
-    loop { run_command(ask('> ') { |q| q.readline = true } ) }
+    loop { run_command(ask('f > ') { |q| q.readline = true } ) }
   end
 
   def http
