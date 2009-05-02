@@ -16,8 +16,8 @@ F::Finder.define :piratebay do
     end
   end
   
-  command :i, 'torrent info', 0 => :result_for_index do |result|
-    puts http.get(result.url).css('.nfo pre').text
+  command :i, 'torrent info', 0 => :result_page_for_index do |page|
+    puts page.at('.nfo pre').text
   end
   
   parse do |page, result|
