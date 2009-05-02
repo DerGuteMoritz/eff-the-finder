@@ -16,15 +16,15 @@ class F::Prompt
   @@commands = {
     :f => [ 'follow link',
             lambda { |r| Launchy.open(r.url.to_s) },
-            { :result_index => 0 } ],
+            { 0 => :result_for_index } ],
 
     :o => [ 'pass selected result to given command (%u for URL, %n for name)',
             lambda { |r, *cmd|
-              c = cmd.join(' ').gsub('%u', r.url.to_s).gsub('%n', r.name)
-              raise ArgumentError, 'command string is required' if c =~ /\A\s*\z/
+              c = cmd.join(' ').gsub('%u', r.url.to_s).gsub('%n', r.name.to_s)
+              raise ArgumentError, 'command string is required' if c.blank?
               system(c)
             },
-            { :result_index => 0 } ],
+            { 0 => :result_for_index } ],
 
     :l => [ 'list results',
             :list ],
@@ -84,7 +84,7 @@ class F::Prompt
     return help unless command
     command = method(command) unless command.respond_to? :call
     return not_enough_arguments(command, args) if args.size < command.arity
-    command.call(*args) || true
+    instance_exec(*args, &command) || true
   rescue => e
     puts "Error: #{e}"
   end
@@ -97,8 +97,10 @@ class F::Prompt
       c = @@commands[s[/\A([a-z]+)/, 1].try(:to_sym)]
       args = Array(s[/\A[a-z]+(.*)/, 1].to_s.strip.split(/\s/))
 
-      if c && c[2] && (i = c[2][:result_index])
-        args[i] = result_for_index(args[i])
+      if c && c[2]
+        c[2].each do |i, cast|
+          args[i] = send(cast, (args[i]))
+        end
       end
     end
 
@@ -119,7 +121,7 @@ class F::Prompt
   end
 
   def result_for_index(i)
-    raise ArgumentError, 'index is required' if i.to_s =~ /\A\s*\z/
+    raise ArgumentError, 'index is required' if i.blank?
     raise InvalidIndex.new(i) if i.to_i <= 0
     @results[i.to_i-1] || raise(InvalidIndex.new(i))
   end
