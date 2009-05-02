@@ -7,7 +7,7 @@ class F::Prompt
 
   @@commands = {
     'f' => [ 'follow link',
-             lambda { |r| Launchy.open(r.url) } ],
+             lambda { |r| Launchy.open(r.url.to_s) } ],
 
     's' => [ 'show results',
              :show ],
@@ -21,6 +21,10 @@ class F::Prompt
     'q' => [ 'quit',
              lambda { exit } ]
   }
+
+  def self.define(name, command)
+    @@commands[name.to_s] = command
+  end
 
   protected
 
