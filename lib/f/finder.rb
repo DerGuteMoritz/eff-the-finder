@@ -27,7 +27,7 @@ class F::Finder
 
     def summary
       max = @@finders.keys.map { |k| k.to_s.size }.max
-      @@finders.map { |name, f| [name.to_s.ljust(max), f.description].join('    ') }.join("\n")
+      @@finders.map { |name, f| [name.to_s.ljust(max), '   ', f.description, "(#{f.base_uri})"].join(' ') }.join("\n")
     end
 
     def attr(*names)
