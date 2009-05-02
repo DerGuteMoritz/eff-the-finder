@@ -27,7 +27,7 @@ class F::Result < DelegateClass(Array)
     names.each do |name|
 
       define_method "#{name}=" do |a|
-        instance_variable_set "@#{name}", a[0]['href'] unless a.empty?
+        instance_variable_set "@#{name}", a.kind_of?(String) ? a : a[0]['href'] unless a.nil? || a.empty?
       end
 
       define_method name do
