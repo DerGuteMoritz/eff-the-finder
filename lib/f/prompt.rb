@@ -135,4 +135,8 @@ class F::Prompt
     @results[i.to_i-1] || raise(InvalidIndex.new(i))
   end
 
+  def result_page_for_index(i)
+    http.get(result_for_index(i).url)
+  end
+
 end
