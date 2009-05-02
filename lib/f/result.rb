@@ -55,7 +55,7 @@ class F::Result < DelegateClass(Array)
 
   def make_item(*args)
     if args.size == 1 && args[0].respond_to?(:text) && args[0].respond_to?(:[])
-      text, url = a.text, a['href']
+      text, url = args[0].text, args[0]['href']
     else
       text, url = *args
     end
@@ -64,7 +64,7 @@ class F::Result < DelegateClass(Array)
   end
 
   def absolutize_url(u)
-    url = URI.parse(u)
+    url = URI.parse(u.to_s.gsub('[', '%5B').gsub(']', '%5D'))
     url = @finder.base_uri.merge(url) unless url.absolute?
     url
   end
@@ -73,6 +73,10 @@ class F::Result < DelegateClass(Array)
     attr = "#{p}_url"
     raise PageError if !respond_to?(attr) || send(attr).nil?
     @finder.find_by_url(send(attr))
+  end
+
+  def http
+    @finder.http
   end
 
   def next_page

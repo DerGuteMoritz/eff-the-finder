@@ -79,14 +79,12 @@ class F::Prompt
     loop { run_command(ask('> ') { |q| q.readline = true } ) }
   end
 
-  def get(url, options = { })
-    u = URI.parse(url)
-    u = u.request_uri if url.absolute?
-    @finder.http.get(u, options).http_body
+  def http
+    @results.http
   end
 
-  def make_item(*args)
-    @result.make_item(*args)
+  def absolutize_url(u)
+    @results.absolutize_url(u)
   end
 
   def run_command(s)

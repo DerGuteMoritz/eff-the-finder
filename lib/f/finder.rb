@@ -1,6 +1,4 @@
-require 'httparty'
-require 'rfuzz/client'
-require 'nokogiri'
+require 'mechanize'
 
 class F::Finder
 
@@ -12,7 +10,7 @@ class F::Finder
     @@finders = {}
 
     def define(name, &block)
-      finder = new.extend(HTTParty)
+      finder = new
       finder.instance_eval(&block)
       @@finders[name] = finder
     end
@@ -58,17 +56,20 @@ class F::Finder
   end
 
   def http
-    @http ||= RFuzz::HttpClient.new(base_uri.host, base_uri.port, :head => { 'Accept' => '*/*' })
+    @http ||=  WWW::Mechanize.new do |m|
+      m.user_agent = 'Eff the Finder'
+      m.get(base_uri)
+    end
   end
-
-  protected
-
-  attr :description
 
   def base_uri(u = nil)
     @base_uri = URI.parse(u) if u
     @base_uri
   end
+
+  protected
+
+  attr :description
 
   def load(args)
     parse(find(args))
@@ -86,7 +87,7 @@ class F::Finder
     if block_given?
       @parse = block
     else
-      @parse.call(Nokogiri(response.http_body), result = F::Result.new(self))
+      @parse.call(response, result = F::Result.new(self))
       return result
     end
   end

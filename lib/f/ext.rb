@@ -1,3 +1,5 @@
+require 'mechanize'
+
 class Object
 
   def try(method)
@@ -31,4 +33,9 @@ class NilClass
     true
   end
 
+end
+
+class WWW::Mechanize::Page
+  def_delegator :parser, :css, :css
+  def_delegator :parser, :xpath, :xpath
 end
