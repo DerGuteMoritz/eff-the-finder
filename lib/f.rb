@@ -4,7 +4,12 @@ require 'pathname'
 class F
 
   def help
-    'This is Eff.'
+    puts 'This is Eff.'
+    puts
+    puts 'Available finders:'
+    puts Finder.summary
+    puts
+    puts "Give finder's name as first argument to use it."
   end
 
   def self.load(glob, base = Pathname.new(__FILE__).dirname.join('f'))
@@ -27,7 +32,7 @@ class F
 
   def eval(args)
     if args.empty?
-      puts help
+      help
     else
       Finder.get(args.shift).run(args)
     end

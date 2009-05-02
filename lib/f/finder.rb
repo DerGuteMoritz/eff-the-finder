@@ -27,6 +27,11 @@ class F::Finder
       exit 1
     end
 
+    def summary
+      max = @@finders.keys.map { |k| k.to_s.size }.max + 1
+      @@finders.map { |name, f| [name.to_s.ljust(max), f.description].join(' - ') }.join("\n")
+    end
+
     def attr(*names)
       names.each do |name|
         class_eval <<-end_class_eval, __FILE__, __LINE__
