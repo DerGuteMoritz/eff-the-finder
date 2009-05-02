@@ -1,6 +1,6 @@
 F::Finder.define :shoutcast do
   
-  description 'Shoutcast station/genre search'
+  description 'Shoutcast station search'
   base_uri 'http://www.shoutcast.com/'
   find { |http, o| http.get '/directory/search_results.jsp', :searchCrit => 'simple', :s => o[:terms] }
   default_command :t
