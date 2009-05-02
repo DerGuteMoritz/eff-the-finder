@@ -57,13 +57,13 @@ class F::Finder
     parse(http.get(url))
   end
 
-  protected
-
-  attr :description
-
   def http
     @http ||= RFuzz::HttpClient.new(base_uri.host, base_uri.port, :head => { 'Accept' => '*/*' })
   end
+
+  protected
+
+  attr :description
 
   def base_uri(u = nil)
     @base_uri = URI.parse(u) if u
@@ -89,6 +89,10 @@ class F::Finder
       @parse.call(Nokogiri(response.http_body), result = F::Result.new(self))
       return result
     end
+  end
+
+  def command(*args, &block)
+    F::Prompt.define(*args, &block)
   end
 
   def prompt(results)

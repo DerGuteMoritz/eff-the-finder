@@ -39,8 +39,8 @@ class F::Prompt
             lambda { exit } ]
   }
 
-  def self.define(name, command)
-    @@commands[name.to_sym] = command
+  def self.define(name, description, castings = { }, &block)
+    @@commands[name.to_sym] = [description, block, castings]
   end
 
   protected
@@ -77,6 +77,16 @@ class F::Prompt
 
   def run
     loop { run_command(ask('> ') { |q| q.readline = true } ) }
+  end
+
+  def get(url, options = { })
+    u = URI.parse(url)
+    u = u.request_uri if url.absolute?
+    @finder.http.get(u, options).http_body
+  end
+
+  def make_item(*args)
+    @result.make_item(*args)
   end
 
   def run_command(s)

@@ -46,14 +46,20 @@ class F::Result < DelegateClass(Array)
   end
 
   def items=(items)
-    @items.replace(items.map { |a| make_item(a.text, a['href']) })
+    @items.replace(items.map { |a| make_item(a) })
   end
 
   def <<(item)
     @items << make_item(*item)
   end
 
-  def make_item(text, url)
+  def make_item(*args)
+    if args.size == 1 && args[0].respond_to?(:text) && args[0].respond_to?(:[])
+      text, url = a.text, a['href']
+    else
+      text, url = *args
+    end
+
     Item.new(text, absolutize_url(url))
   end
 
