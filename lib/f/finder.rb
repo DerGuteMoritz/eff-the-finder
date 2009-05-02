@@ -43,6 +43,7 @@ class F::Finder
 
   end
 
+  attr :description, :default_command
   attr_reader :commands
 
   def initialize
@@ -80,8 +81,6 @@ class F::Finder
   end
 
   protected
-
-  attr :description
 
   def load(args)
     parse(find(args))

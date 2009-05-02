@@ -100,7 +100,7 @@ class F::Prompt
 
   def parse_command_string(s)
     if s =~ /\A(\d+)\z/
-      c = @commands[:f]
+      c = @commands[@finder.default_command || :f]
       args = [result_for_index($1)]
     else
       c = @commands[s[/\A([a-z]+)/, 1].try(:to_sym)]
