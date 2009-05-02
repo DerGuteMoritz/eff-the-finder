@@ -60,23 +60,13 @@ class F::Result < DelegateClass(Array)
       text, url = *args
     end
 
-    Item.new(text, absolutize_url(url))
-  end
-
-  def absolutize_url(u)
-    url = URI.parse(u.to_s.gsub('[', '%5B').gsub(']', '%5D'))
-    url = @finder.base_uri.merge(url) unless url.absolute?
-    url
+    Item.new(text, @finder.absolutize_uri(url))
   end
 
   def page(p)
     attr = "#{p}_url"
     raise PageError if !respond_to?(attr) || send(attr).nil?
     @finder.find_by_url(send(attr))
-  end
-
-  def http
-    @finder.http
   end
 
   def next_page

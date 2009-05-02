@@ -45,8 +45,9 @@ class F::Prompt
 
   protected
 
-  def initialize(results)
-    @results = results
+  def initialize(finder, results)
+    @finder, @results = finder, results
+    @commands = @@commands.merge(@finder.commands)
     list
     run
   end
@@ -80,11 +81,11 @@ class F::Prompt
   end
 
   def http
-    @results.http
+    @finder.http
   end
 
-  def absolutize_url(u)
-    @results.absolutize_url(u)
+  def absolutize_uri(u)
+    @finder.absolutize_uri(u)
   end
 
   def run_command(s)
@@ -99,10 +100,10 @@ class F::Prompt
 
   def parse_command_string(s)
     if s =~ /\A(\d+)\z/
-      c = @@commands[:f]
+      c = @commands[:f]
       args = [result_for_index($1)]
     else
-      c = @@commands[s[/\A([a-z]+)/, 1].try(:to_sym)]
+      c = @commands[s[/\A([a-z]+)/, 1].try(:to_sym)]
       args = Array(s[/\A[a-z]+(.*)/, 1].to_s.strip.split(/\s/))
 
       if c && c[2]
@@ -121,7 +122,7 @@ class F::Prompt
 
   def help
     puts 'Available commands: '
-    puts @@commands.sort_by { |c| c[0].to_s }.map { |a,c| "#{a} - #{c[0]}" }.join("\n")
+    puts @commands.sort_by { |c| c[0].to_s }.map { |a,c| "#{a} - #{c[0]}" }.join("\n")
   end
 
   def not_enough_arguments(c, a)

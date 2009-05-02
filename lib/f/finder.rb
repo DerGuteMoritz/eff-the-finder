@@ -43,6 +43,12 @@ class F::Finder
 
   end
 
+  attr_reader :commands
+
+  def initialize
+    @commands = { }
+  end
+
   def run(args)
     if args.empty?
       puts description
@@ -65,6 +71,12 @@ class F::Finder
   def base_uri(u = nil)
     @base_uri = URI.parse(u) if u
     @base_uri
+  end
+
+  def absolutize_uri(u)
+    uri = URI.parse(u.to_s.gsub('[', '%5B').gsub(']', '%5D'))
+    uri = @finder.base_uri.merge(uri) unless uri.absolute?
+    uri
   end
 
   protected
@@ -92,12 +104,12 @@ class F::Finder
     end
   end
 
-  def command(*args, &block)
-    F::Prompt.define(*args, &block)
+  def command(name, description, castings = { }, &block)
+    @commands[name.to_sym] = [description, block, castings]
   end
 
   def prompt(results)
-    F::Prompt.new(results)
+    F::Prompt.new(self, results)
   end
 
 end
