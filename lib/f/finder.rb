@@ -44,7 +44,7 @@ class F::Finder
   end
 
   attr :description, :default_command
-  attr_reader :commands
+  attr_reader :commands, :args
 
   def initialize
     @commands = { }
@@ -92,6 +92,8 @@ class F::Finder
     else
       @find.call(http, { :args => args, :terms => args.join(' ') } )
     end
+  ensure
+    @args = args if args
   end
 
   def parse(response = nil, &block)

@@ -4,7 +4,6 @@ F::Finder.define :imdb do
   find { |http, o| http.get '/find', :q => o[:args].join('+'), :s => 'tt' }
 
   parse do |page, result|
-    result.header = 'Results for ' + page.at('input[name="q"]')['value']
     page.css('td > a[href^="/title/"]').each do |a|
       next if a.text.blank?
       result << [a.parent.text.squeeze, a['href']]

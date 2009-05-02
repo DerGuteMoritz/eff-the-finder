@@ -45,6 +45,10 @@ class F::Result < DelegateClass(Array)
     super(@items)
   end
 
+  def header
+    @header || "Results for #{@finder.args.join(' ')}"
+  end
+
   def items=(items)
     @items.replace(items.map { |a| make_item(a) })
   end
