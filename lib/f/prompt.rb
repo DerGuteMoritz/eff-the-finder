@@ -15,10 +15,19 @@ class F::Prompt
 
   @@commands = {
     :f => [ 'follow link',
-            lambda { |r| Launchy.open(r.url.to_s) } ],
+            lambda { |r| Launchy.open(r.url.to_s) },
+            { :result_index => 0 } ],
 
-    :s => [ 'show results',
-            :show ],
+    :o => [ 'pass selected result to given command (%u for URL, %n for name)',
+            lambda { |r, *cmd|
+              c = cmd.join(' ').gsub('%u', r.url.to_s).gsub('%n', r.name)
+              raise ArgumentError, 'command string is required' if c =~ /\A\s*\z/
+              system(c)
+            },
+            { :result_index => 0 } ],
+
+    :l => [ 'list results',
+            :list ],
 
     :n => [ 'next page',
             :next_page ],
@@ -38,11 +47,11 @@ class F::Prompt
 
   def initialize(results)
     @results = results
-    show
+    list
     run
   end
 
-  def show
+  def list
     puts @results.header if @results.header
 
     @results.each_with_index do |r, i|
@@ -53,7 +62,7 @@ class F::Prompt
 
   def page(p)
     @results = @results.send("#{p}_page")
-    show
+    list
   rescue F::Result::PageError
     puts "There is no #{p} page"
   end
@@ -76,8 +85,8 @@ class F::Prompt
     command = method(command) unless command.respond_to? :call
     return not_enough_arguments(command, args) if args.size < command.arity
     command.call(*args) || true
-  rescue InvalidIndex => e
-    puts e
+  rescue => e
+    puts "Error: #{e}"
   end
 
   def parse_command_string(s)
@@ -87,7 +96,10 @@ class F::Prompt
     else
       c = @@commands[s[/\A([a-z]+)/, 1].try(:to_sym)]
       args = Array(s[/\A[a-z]+(.*)/, 1].to_s.strip.split(/\s/))
-      args[0] = result_for_index(args[0]) if args[0].to_s =~ /\A\d+\z/
+
+      if c && c[2] && (i = c[2][:result_index])
+        args[i] = result_for_index(args[i])
+      end
     end
 
     [c && c[1], args]
@@ -107,7 +119,8 @@ class F::Prompt
   end
 
   def result_for_index(i)
-    raise(InvalidIndex.new(i)) if i.to_i <= 0
+    raise ArgumentError, 'index is required' if i.to_s =~ /\A\s*\z/
+    raise InvalidIndex.new(i) if i.to_i <= 0
     @results[i.to_i-1] || raise(InvalidIndex.new(i))
   end
 
