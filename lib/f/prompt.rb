@@ -107,6 +107,7 @@ class F::Prompt
   end
 
   def result_for_index(i)
+    raise(InvalidIndex.new(i)) if i.to_i <= 0
     @results[i.to_i-1] || raise(InvalidIndex.new(i))
   end
 
