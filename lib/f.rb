@@ -4,9 +4,8 @@ require 'pathname'
 class F
 
   def help
-    puts 'This is Eff.'
+    puts 'Eff The Finder'
     puts
-    puts 'Available finders:'
     puts Finder.summary
     puts
     puts "Give finder's name as first argument to use it."
