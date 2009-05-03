@@ -9,7 +9,7 @@ F::Finder.define :youtube do
     player = env('FLV_PLAYER')
     
     if page.body =~ /swfArgs.*"video_id"\s*:\s*"(.*?)".*"t"\s*:\s*"(.*?)".*/
-      system("#{player} 'http://www.youtube.com/get_video?video_id=#{$1}&t=#{$2}'")
+      system(player, "http://www.youtube.com/get_video?video_id=#{$1}&t=#{$2}")
     end
   end
 

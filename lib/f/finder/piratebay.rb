@@ -10,7 +10,7 @@ F::Finder.define :piratebay do
 
     Tempfile.open 'f.piratebay' do |f|
       f.write(http.get(page.at('.download a')['href']).content)
-      system("#{torrent} #{f.path}")
+      system(torrent, f.path)
     end
   end
   
