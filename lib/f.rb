@@ -3,12 +3,14 @@ require 'pathname'
 
 class F
 
+  VERSION = '0.0.1'
+
   def help
     puts 'Eff The Finder'
     puts
     puts Finder.summary
     puts
-    puts "Give finder's name as first argument to use it."
+    puts "Give a finder's name (initial letters suffice) as first argument to use it."
   end
 
   class << self
