@@ -6,6 +6,7 @@ class F::Result < DelegateClass(Array)
   end
 
   attr_accessor :header
+  attr_reader :page
 
   class Item
 
@@ -39,8 +40,8 @@ class F::Result < DelegateClass(Array)
 
   url_from_anchor_attr :next_url, :previous_url
 
-  def initialize(finder)
-    @finder = finder
+  def initialize(finder, page)
+    @finder, @page = finder, page
     @items = []
     super(@items)
   end

@@ -100,7 +100,7 @@ class F::Finder
     if block_given?
       @parse = block
     else
-      @parse.call(response, result = F::Result.new(self))
+      @parse.call(response, result = F::Result.new(self, response))
       return result
     end
   end
