@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'irb'
 require 'pathname'
-require Pathname.new(__FILE__).dirname.join('../lib/f')
+require Pathname.new(__FILE__).realpath.dirname.join('../lib/f')
 F.new(ARGV)
