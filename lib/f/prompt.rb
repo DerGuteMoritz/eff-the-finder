@@ -5,6 +5,8 @@ HighLine.track_eof = false
 
 class F::Prompt
 
+  attr_reader :results
+
   class InvalidIndex < StandardError
 
     def initialize(index)
