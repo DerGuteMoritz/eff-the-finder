@@ -12,15 +12,23 @@ class F
     puts "Give finder's name as first argument to use it."
   end
 
-  def self.load(glob, base = Pathname.new(__FILE__).dirname.join('f'))
-    Dir[Pathname.new(base).join(File.join(*Array(glob)))].each do |file|
-      require file
+  class << self
+
+    def load(glob, base = Pathname.new(__FILE__).dirname.join('f'))
+      Dir[Pathname.new(base).join(File.join(*Array(glob)))].each do |file|
+        require file
+      end
     end
+
+    def rcload(glob)
+      load ['.f/', glob], ENV['HOME']
+    end
+
   end
 
   load '*.rb'
   load 'finder/*.rb'
-  load [ENV['HOME'], '.f/*.rb']
+  rcload '*.rb'
 
   def initialize(args)
     eval(args)
