@@ -1,3 +1,7 @@
+== 0.0.2 2009-05-03
+
+security fixes regarding shell argument escaping
+
 == 0.0.1 2009-05-03
 
 * 1 major enhancement:
