@@ -1,0 +1,14 @@
+History.txt
+README.rdoc
+Rakefile
+bin/f
+lib/f.rb
+lib/f/ext.rb
+lib/f/finder.rb
+lib/f/finder/google.rb
+lib/f/finder/imdb.rb
+lib/f/finder/piratebay.rb
+lib/f/finder/shoutcast.rb
+lib/f/finder/youtube.rb
+lib/f/prompt.rb
+lib/f/result.rb
