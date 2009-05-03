@@ -22,7 +22,7 @@ class F::Prompt
 
     :o => [ 'pass selected result to given command (%u for URL, %n for name)',
             lambda { |r, *cmd|
-              c = cmd.join(' ').inject('u' => :url, 'n' => :name) { |pv,s| pv.inject(s) { |s,(p,v)| s.gsub(/([^\\]|\A)%#{p}/) { $1.to_s + r.send(v).to_s } } }.gsub('\%', '%')
+              c = cmd.join(' ').inject('u' => lambda { r.url }, 'n' => lambda { r.name }, '%' => lambda { '%' }) { |x,s| s.gsub(/%(#{x.keys.join('|')})/) { x[$1].call } }
               raise ArgumentError, 'command string is required' if c.blank?
               system(c)
             },
