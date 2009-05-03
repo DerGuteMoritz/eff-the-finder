@@ -5,8 +5,8 @@
 == DESCRIPTION
 
 Eff is a command line interface to various search engines. To get an
-overview of available search engines (called `finders' in Eff's terminology),
-just type `f' in your terminal:
+overview of available search engines (called +finders+ in Eff's terminology),
+just type +f+ in your terminal:
 
   f
 
@@ -15,7 +15,7 @@ To search Google, type
   f google rickroll
 
 You might as well just give the first few distinctive characters of the finder's
-name, so unless you have defined another finder starting with `g', this is 
+name, so unless you have defined another finder starting with +g+, this is 
 equivalent to the above:
 
   f g rickroll
@@ -38,18 +38,18 @@ waiting for further instructions:
 
   f > 
 
-You may press `return' to get a list of available commands. There are 6 basic 
-commands (one of them `q' for quit) which are available for all finders. However,
+You may press +return+ to get a list of available commands. There are 6 basic 
+commands (one of them +q+ for quit) which are available for all finders. However,
 finders may specify their own commands so taking a look at the command overview
 is always a good idea.
 
-Now, first of all, there are `n' and `p' for turning to the next and previous 
-pages. If you forgot which page you're on, `l' will remind you by printing the
+Now, first of all, there are +n+ and +p+ for turning to the next and previous 
+pages. If you forgot which page you're on, +l+ will remind you by printing the
 results of the current page again.
 
 Of course, the interesting part is interacting with the results. At the moment, 
-there are 2 basic interaction commands: `f' opens the given result in your 
-web browser (using http://copiousfreetime.rubyforge.org/launchy/) and `o' allows
+there are 2 basic interaction commands: +f+ opens the given result in your 
+web browser (using http://copiousfreetime.rubyforge.org/launchy/) and +o+ allows
 you to pass the result name or URI to an arbitrary shell command. Results are 
 identified by their numeric index, so to open the Wikipedia article on 
 Rickrolling from the result page above in your web browser you'd type:
@@ -58,27 +58,27 @@ Rickrolling from the result page above in your web browser you'd type:
 
 The space is optional for result index arguments. Also, every finder may define
 a default command to be executed on result items which is run whenever you type
-nothing but a result index. The default default command is `f', so unless your
+nothing but a result index. The default default command is +f+, so unless your
 current finder overrides the default (which the google finder doesn't), this is
 equivalent to the example above:
 
   f > 1
 
-The `o' command is similar but it requires a command string after the result 
-index. Within the command string, you may use the placeholders %u and %n which
+The +o+ command is similar but it requires a command string after the result 
+index. Within the command string, you may use the placeholders <tt>%u</tt> and <tt>%n</tt> which
 are substituted by the selected result's URI and name. For example, this:
 
   f > o1 echo %u
 
-(note the omitted space after `o') would output:
+(note the omitted space after +o+) would output:
 
   http://en.wikipedia.org/wiki/Rickroll
 
 == CREATING FINDERS
 
-Creating your own finders is very easy. Take a look at lib/f/finder/*.rb for 
+Creating your own finders is very easy. Take a look at <tt>lib/f/finder/*.rb</tt> for 
 examples. A more detailed how-to will be available soon. Note that Eff will 
-auto-require $HOME/.f/*.rb on startup, so this is a good place for your code.
+auto-require <tt>$HOME/.f/*.rb</tt> on startup, so this is a good place for your code.
 
 == INSTALL
 
