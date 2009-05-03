@@ -1,32 +1,94 @@
-= eff
+= Eff The Finder
 
-* http://github.com/#{github_username}/#{project_name}
+  http://github.com/DerGuteMoritz/eff-the-finder/
 
-== DESCRIPTION:
+== DESCRIPTION
 
-FIX (describe your package)
+Eff is a command line interface to various search engines. To get an
+overview of available search engines (called `finders' in Eff's terminology),
+just type `f' in your terminal:
 
-== FEATURES/PROBLEMS:
+  f
 
-* FIX (list of features or problems)
+To search Google, type
 
-== SYNOPSIS:
+  f google rickroll
 
-  FIX (code sample of usage)
+You might as well just give the first few distinctive characters of the finder's
+name, so unless you have defined another finder starting with `g', this is 
+equivalent to the above:
 
-== REQUIREMENTS:
+  f g rickroll
 
-* FIX (list of requirements)
+Voilá, the first 10 Google hits for rickroll:
 
-== INSTALL:
+  1.  Rickrolling - Wikipedia, the free encyclopedia
+  2.  YouTube - RickRoll'D
+  3.  YouTube - Rick Roll: The Literal Version
+  4.  Urban Dictionary: rickroll
+  5.  Rick Roll. You Got Rick Rolled
+  6.  Rickroll - Encyclopedia Dramatica
+  7.  Rick Astley Â Wikipedia
+  8.  YOU GOT RICK ROLL'D
+  9.  Rickroll Database: never get rickroll'd again
+  10. Rick Roll It!
 
-* FIX (sudo gem install, anything else)
+Great, what now? Below the list of results you are greeted with Eff's prompt,
+waiting for further instructions: 
 
-== LICENSE:
+  f > 
+
+You may press `return' to get a list of available commands. There are 6 basic 
+commands (one of them `q' for quit) which are available for all finders. However,
+finders may specify their own commands so taking a look at the command overview
+is always a good idea.
+
+Now, first of all, there are `n' and `p' for turning to the next and previous 
+pages. If you forgot which page you're on, `l' will remind you by printing the
+results of the current page again.
+
+Of course, the interesting part is interacting with the results. At the moment, 
+there are 2 basic interaction commands: `f' opens the given result in your 
+web browser (using http://copiousfreetime.rubyforge.org/launchy/) and `o' allows
+you to pass the result name or URI to an arbitrary shell command. Results are 
+identified by their numeric index, so to open the Wikipedia article on 
+Rickrolling from the result page above in your web browser you'd type:
+
+  f > f 1
+
+The space is optional for result index arguments. Also, every finder may define
+a default command to be executed on result items which is run whenever you type
+nothing but a result index. The default default command is `f', so unless your
+current finder overrides the default (which the google finder doesn't), this is
+equivalent to the example above:
+
+  f > 1
+
+The `o' command is similar but it requires a command string after the result 
+index. Within the command string, you may use the placeholders %u and %n which
+are substituted by the selected result's URI and name. For example, this:
+
+  f > o1 echo %u
+
+(note the omitted space after `o') would output:
+
+  http://en.wikipedia.org/wiki/Rickroll
+
+== CREATING FINDERS
+
+Creating your own finders is very easy. Take a look at lib/f/finder/*.rb for 
+examples. A more detailed how-to will be available soon. Note that Eff will 
+auto-require $HOME/.f/*.rb on startup, so this is a good place for your code.
+
+== INSTALL
+
+gem install DerGuteMoritz-eff-the-finder --source http://gems.github.com
+
+== LICENSE
 
 (The MIT License)
 
-Copyright (c) 2009 FIXME full name
+Copyright (c) 2009 Moritz Heidkamp
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
