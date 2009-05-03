@@ -11,7 +11,7 @@ F::Finder.define :shoutcast do
   end
 
   parse do |page, result|
-    result.header = page.css('.paginationSelected').text
+    result.header << page.css('.paginationSelected').text
     
     nav = %w[Prev Next].map do |x|
       a = page.at(".paginationCntexpand a .bright#{x}").try(:parent)

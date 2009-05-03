@@ -46,7 +46,7 @@ class F::Result < DelegateClass(Array)
   end
 
   def header
-    @header || "Results for #{@finder.args.join(' ')}"
+    @header ||= "Results for #{@finder.args.join(' ')}\n"
   end
 
   def items=(items)

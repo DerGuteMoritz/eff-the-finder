@@ -20,7 +20,7 @@ F::Finder.define :piratebay do
   end
   
   parse do |page, result|
-    result.header = page.css('h2').text
+    result.header << page.xpath('//h2/text()').text[2..-1]
     result.previous_url = page.xpath('//img[@alt="Previous"]/parent::a')
     result.next_url = page.xpath('//img[@alt="Next"]/parent::a')
     result.items = page.css('#SearchResults a.detLink')
