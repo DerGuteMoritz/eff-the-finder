@@ -1,9 +1,12 @@
 require 'highline/import'
 require 'launchy'
+require 'shellwords'
 
 HighLine.track_eof = false
 
 class F::Prompt
+
+  include Shellwords
 
   attr_reader :results
 
@@ -21,10 +24,8 @@ class F::Prompt
             { 0 => :result_for_index } ],
 
     :o => [ 'pass selected result to given command (%u for URL, %n for name)',
-            lambda { |r, *cmd|
-              c = cmd.join(' ').inject('u' => lambda { r.url }, 'n' => lambda { r.name }, '%' => lambda { '%' }) { |x,s| s.gsub(/%(#{x.keys.join('|')})/) { x[$1].call } }
-              raise ArgumentError, 'command string is required' if c.blank?
-              system(c)
+            lambda { |r, cmd, *args|
+              system(cmd, *args.map { |a| a.inject('u' => lambda { r.url }, 'n' => lambda { r.name }, '%' => lambda { '%' }) { |x,s| s.gsub(/%(#{x.keys.join('|')})/) { x[$1].call } } })
             },
             { 0 => :result_for_index } ],
 
@@ -108,7 +109,7 @@ class F::Prompt
       args = [send(c[2][0], $1)]
     else
       c = @commands[s[/\A([a-z]+)/, 1].try(:to_sym)]
-      args = Array(s[/\A[a-z]+(.*)/, 1].to_s.strip.split(/\s/))
+      args = shellwords(s[/\A[a-z]+(.*)/, 1].to_s)
 
       if c && c[2]
         c[2].each do |i, cast|
