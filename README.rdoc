@@ -82,7 +82,7 @@ auto-require $HOME/.f/*.rb on startup, so this is a good place for your code.
 
 == INSTALL
 
-gem install DerGuteMoritz-eff-the-finder --source http://gems.github.com
+  gem install DerGuteMoritz-eff-the-finder --source http://gems.github.com
 
 == LICENSE
 
