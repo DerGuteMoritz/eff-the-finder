@@ -6,7 +6,7 @@ F::Finder.define :shoutcast do
   default_command :t
   
   command :t, 'tune in with SHOUTCAST_PLAYER', 0 => :result_for_index do |result|
-    system(env('SHOUTCAST_PLAYER'), result.url)
+    system(*(shellwords(env('SHOUTCAST_PLAYER')) << result.url.to_s))
   end
 
   parse do |page, result|

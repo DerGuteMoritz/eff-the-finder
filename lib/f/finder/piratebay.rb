@@ -6,11 +6,12 @@ F::Finder.define :piratebay do
   find { |http, o| http.get "/search/#{o[:terms]}" }
   
   command :t, 'download torrent file and open it with BITTORRENT_CLIENT', 0 => :result_page_for_index do |page|
-    torrent = env('BITTORRENT_CLIENT')
+    torrent = shellwords(env('BITTORRENT_CLIENT'))
 
     Tempfile.open 'f.piratebay' do |f|
-      f.write(http.get(page.at('.download a')['href']).content)
-      system(torrent, f.path)
+      f.write(http.get(absolutize_uri(page.at('.download a')['href'])).content)
+      f.close
+      system(*(torrent << f.path))
     end
   end
   
