@@ -3,7 +3,7 @@ require 'pathname'
 
 class F
 
-  VERSION = '0.0.1'
+  VERSION = '0.0.3'
 
   def help
     puts 'Eff The Finder'
