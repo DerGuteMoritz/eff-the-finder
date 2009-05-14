@@ -10,9 +10,9 @@ just type +f+ in your terminal:
 
   f
 
-Currently, Eff ships with finders for Google, IMDB, Pirate Bay, Shoutcast.com
-and YouTube. You can also easily create your own finders (see Creating Finders 
-below).
+Currently, Eff ships with finders for Google, IMDB, Pirate Bay, Shoutcast.com, 
+YouTube and APIdock. You can also easily create your own finders (see Creating 
+Finders below).
 
 To search Google, type
 
